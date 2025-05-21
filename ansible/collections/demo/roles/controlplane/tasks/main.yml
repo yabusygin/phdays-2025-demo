@@ -1,0 +1,10 @@
+---
+- name: Initialize Kubernetes control plane node
+  ansible.builtin.command:
+    argv:
+      - kubeadm
+      - init
+      - --apiserver-advertise-address={{ controlplane_apiserver_address }}
+      - --pod-network-cidr={{ controlplane_pod_network_cidr }}
+    creates: /etc/kubernetes/manifests/kube-apiserver.yaml
+  changed_when: true

@@ -1,0 +1,50 @@
+---
+argument_specs:
+  main:
+    short_description: Configure networking for the demo stand
+    description:
+      - >
+          Configure base networking for the demo stand: interface addresses,
+          default gateway and IP packet forwarding.
+    version_added: 0.1.0
+    author:
+      - Alexey Busygin
+    options:
+      networking_hostname:
+        type: str
+        required: true
+        description:
+          - Hostname (`/etc/hostname` and `/etc/hosts`).
+        version_added: 0.1.0
+      networking_mgmt_iface_name:
+        type: str
+        required: true
+        description:
+          - Name of the upstream network interface.
+        version_added: 0.1.0
+      networking_mgmt_iface_nat:
+        type: bool
+        required: false
+        description:
+          - Enable NAT at management network interface.
+        default: false
+        version_added: 0.1.0
+      networking_k8s_iface_name:
+        type: str
+        required: true
+        description:
+          - Name of the Kubernetes network interface.
+        version_added: 0.1.0
+      networking_k8s_iface_cidr:
+        type: str
+        required: true
+        description:
+          - >
+              IP address and network prefix length (CIDR notation)
+              of the Kubernetes network interface.
+        version_added: 0.1.0
+      networking_k8s_gateway:
+        type: str
+        required: false
+        description:
+          - IP address of the Kubernetes network default gateway.

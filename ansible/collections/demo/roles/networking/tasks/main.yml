@@ -1,0 +1,73 @@
+---
+- name: Set hostname in /etc/hostname
+  ansible.builtin.hostname:
+    name: "{{ networking_hostname }}"
+
+- name: Set hostname in /etc/hosts
+  ansible.builtin.replace:
+    path: /etc/hosts
+    regexp: '^(127\.0\.1\.1\s+).*$'
+    replace: '\1{{ networking_hostname }}'
+
+- name: Set base configuration
+  ansible.builtin.copy:
+    src: interfaces
+    dest: /etc/network/interfaces
+    mode: u=rw,g=r,o=r
+  notify:
+    - Restart networking
+
+- name: Set management network interface configuration
+  ansible.builtin.template:
+    src: interfaces.mgmt.jinja
+    dest: /etc/network/interfaces.d/mgmt
+    mode: u=rw,g=r,o=r
+  notify:
+    - Restart networking
+
+- name: Enable NAT at management network interface
+  when: networking_mgmt_iface_nat
+  block:
+    - name: Install iptables-persistent
+      ansible.builtin.apt:
+        name:
+          - iptables-persistent
+        state: present
+        update_cache: true
+
+    - name: Set IPv4 rules
+      ansible.builtin.template:
+        src: rules.v4.jinja
+        dest: /etc/iptables/rules.v4
+        mode: u=rw,g=,o=
+      notify:
+        - Load IPv4 iptables rules
+
+    - name: Enable netfilter-persistent service
+      ansible.builtin.systemd:
+        name: netfilter-persistent
+        state: started
+        enabled: true
+
+- name: Set Kubernetes network interface configuration
+  ansible.builtin.template:
+    src: interfaces.k8s.jinja
+    dest: /etc/network/interfaces.d/k8s
+    mode: u=rw,g=r,o=r
+  notify:
+    - Restart networking
+
+- name: Enshure local sysctl configuration file exists
+  ansible.builtin.file:
+    path: /etc/sysctl.d/local.conf
+    state: touch
+    mode: u=rw,g=r,o=r
+
+- name: Enable IP packet forwarding
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.d/local.conf
+    regexp: '^net\.ipv4\.ip_forward\b'
+    line: net.ipv4.ip_forward = 1
+    state: present
+  notify:
+    - Load sysctl configuration

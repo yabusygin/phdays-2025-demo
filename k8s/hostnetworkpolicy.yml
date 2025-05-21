@@ -1,0 +1,46 @@
+# Failsafe rules already allow lots of traffic. See:
+# https://docs.tigera.io/calico/latest/network-policy/hosts/protect-hosts#avoid-accidentally-cutting-all-host-connectivity
+# https://docs.tigera.io/calico/latest/reference/felix/configuration#FailsafeInboundHostPorts
+# https://docs.tigera.io/calico/latest/reference/felix/configuration#FailsafeOutboundHostPorts
+#
+# IP over IP is allowed. See the "Allow IPIP packets from Calico hosts" rule
+# in the "cali-INPUT" chain of the "filter" table.
+
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: control-plane
+spec:
+  selector: "node-name == 'control-plane'"
+  types:
+    - Ingress
+    - Egress
+  egress:
+    - action: Allow
+      protocol: TCP
+      destination:
+        nets:
+          - 192.168.78.11/32  # worker-alice-1
+          - 192.168.78.12/32  # worker-alice-2
+          - 192.168.78.13/32  # worker-mallory
+        ports:
+          - 10250  # Kubelet API
+---
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: worker
+spec:
+  selector: "node-name in { 'worker-alice-1', 'worker-alice-2', 'worker-mallory' }"
+  types:
+    - Ingress
+    - Egress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        nets:
+          - 192.168.78.10/32  # control-plane
+      destination:
+        ports:
+          - 10250  # Kubelet API

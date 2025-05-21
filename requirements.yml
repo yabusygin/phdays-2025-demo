@@ -1,0 +1,4 @@
+---
+collections:
+  - name: ansible/collections/demo
+    type: dir

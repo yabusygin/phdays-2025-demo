@@ -1,0 +1,10 @@
+---
+- name: Remove swap entry from /etc/fstab
+  ansible.posix.mount:
+    name: none
+    fstype: swap
+    state: absent
+
+- name: Disable swap
+  ansible.builtin.command: swapoff --all
+  changed_when: true

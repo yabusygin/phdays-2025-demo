@@ -1,0 +1,3 @@
+--requirement=requirements.txt
+
+ansible-lint==25.1.3

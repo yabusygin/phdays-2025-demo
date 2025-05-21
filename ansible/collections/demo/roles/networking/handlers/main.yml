@@ -1,0 +1,13 @@
+---
+- name: Restart networking
+  ansible.builtin.systemd_service:
+    name: networking
+    state: restarted
+
+- name: Load sysctl configuration
+  ansible.builtin.command: sysctl --load=/etc/sysctl.d/local.conf
+  changed_when: true
+
+- name: Load IPv4 iptables rules
+  ansible.builtin.command: iptables-restore /etc/iptables/rules.v4
+  changed_when: true

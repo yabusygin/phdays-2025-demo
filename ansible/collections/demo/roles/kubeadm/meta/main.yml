@@ -1,0 +1,4 @@
+---
+galaxy_info:
+  author: Alexey Busygin
+  description: Install kubelet, kubectl and kubeadm

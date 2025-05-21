@@ -1,0 +1,10 @@
+---
+namespace: local
+name: demo
+version: 0.1.0
+readme: README.md
+authors:
+  - Alexey Busygin <yabusygin@gmail.com>
+description: Kubernetes MITM demo.
+dependencies:
+  ansible.posix: ">=2.0.0,<3.0.0"

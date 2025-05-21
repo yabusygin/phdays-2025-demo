@@ -1,0 +1,16 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: worker-alice-deny-mallory
+spec:
+  selector: "node-name in { 'worker-alice-1', 'worker-alice-2' }"
+  doNotTrack: true
+  applyOnForward: true
+  types:
+    - Ingress
+  ingress:
+    - action: Deny
+      source:
+        nets:
+          - 192.168.78.13/32  # worker-mallory
+      protocol: 4  # IPv4 (IP-over-IP)

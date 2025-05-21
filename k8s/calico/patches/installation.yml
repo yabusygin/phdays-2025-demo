@@ -1,0 +1,17 @@
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    linuxDataplane: Iptables  # default
+    ipPools:
+      - name: default-ipv4-ippool
+        cidr: 172.29.0.0/16
+        encapsulation: IPIP  # default
+  controlPlaneNodeSelector:
+    node-role.kubernetes.io/control-plane: ""
+  controlPlaneTolerations:
+    - key: node-role.kubernetes.io/control-plane
+      effect: NoSchedule
+  controlPlaneReplicas: 1

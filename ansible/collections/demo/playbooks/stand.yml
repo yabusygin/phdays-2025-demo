@@ -1,0 +1,40 @@
+---
+- name: Configure networking
+  hosts: stand
+  tasks:
+    - name: Configure networking
+      ansible.builtin.import_role:
+        name: local.demo.networking
+
+- name: Configure nodes (common configuration)
+  hosts: k8s
+  tasks:
+    - name: Configure networking
+      ansible.builtin.import_role:
+        name: local.demo.networking
+
+    - name: Disable swap
+      ansible.builtin.import_role:
+        name: local.demo.swapoff
+
+    - name: Install container runtime
+      ansible.builtin.import_role:
+        name: local.demo.containerd
+
+    - name: Install kubelet, kubectl and kubeadm
+      ansible.builtin.import_role:
+        name: local.demo.kubeadm
+
+- name: Initialize control plane
+  hosts: control-plane
+  tasks:
+    - name: Initialize control plane
+      ansible.builtin.import_role:
+        name: local.demo.controlplane
+
+- name: Initialize worker nodes
+  hosts: workers
+  tasks:
+    - name: Initialize worker nodes
+      ansible.builtin.import_role:
+        name: local.demo.worker

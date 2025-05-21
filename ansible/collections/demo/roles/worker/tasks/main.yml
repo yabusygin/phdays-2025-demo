@@ -1,0 +1,44 @@
+---
+- name: Get bootstrap token
+  ansible.builtin.command:
+    argv:
+      - kubeadm
+      - token
+      - list
+      - --output=jsonpath={$.token}
+  changed_when: false
+  register: _result
+  delegate_to: "{{ worker_control_plane_node }}"
+
+- name: Extract bootstrap token
+  ansible.builtin.set_fact:
+    worker_bootstrap_token: "{{ _result.stdout }}"
+
+- name: Get CA certificate hash
+  ansible.builtin.shell: |
+    set -o pipefail
+    cat /etc/kubernetes/pki/ca.crt \
+    | openssl x509 -pubkey \
+    | openssl pkey -pubin -outform DER 2>/dev/null \
+    | openssl dgst -sha256 -hex \
+    | sed 's/^.* //'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: _result
+  delegate_to: "{{ worker_control_plane_node }}"
+
+- name: Extract CA certificate hash
+  ansible.builtin.set_fact:
+    worker_ca_cert_hash: "{{ _result.stdout }}"
+
+- name: Join cluster
+  ansible.builtin.command:
+    argv:
+      - kubeadm
+      - join
+      - "{{ worker_apiserver_address }}:6443"
+      - --token={{ worker_bootstrap_token }}
+      - --discovery-token-ca-cert-hash=sha256:{{ worker_ca_cert_hash }}
+    creates: /etc/kubernetes/kubelet.conf
+  changed_when: true

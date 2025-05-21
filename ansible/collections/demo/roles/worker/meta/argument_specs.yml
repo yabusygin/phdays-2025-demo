@@ -1,0 +1,22 @@
+---
+argument_specs:
+  main:
+    short_description: Initialize Kubernetes worker node
+    description:
+      - Initialize Kubernetes worker node.
+    version_added: 0.1.0
+    author:
+      - Alexey Busygin
+    options:
+      worker_control_plane_node:
+        type: str
+        required: true
+        description:
+          - Сontrol plane node host.
+        version_added: 0.1.0
+      worker_apiserver_address:
+        type: str
+        required: true
+        description:
+          - IP address of the API Server.
+        version_added: 0.1.0

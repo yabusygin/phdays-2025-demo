@@ -1,0 +1,6 @@
+allow-hotplug {{ networking_k8s_iface_name }}
+iface {{ networking_k8s_iface_name }} inet static
+    address {{ networking_k8s_iface_cidr }}
+{%if networking_k8s_gateway is defined %}
+    gateway {{ networking_k8s_gateway }}
+{% endif %}

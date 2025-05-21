@@ -1,0 +1,22 @@
+---
+argument_specs:
+  main:
+    short_description: Initialize Kubernetes control plane node
+    description:
+      - Initialize Kubernetes control plane node.
+    version_added: 0.1.0
+    author:
+      - Alexey Busygin
+    options:
+      controlplane_pod_network_cidr:
+        type: str
+        required: true
+        description:
+          - IP address range (CIDR notation) for the pod network.
+        version_added: 0.1.0
+      controlplane_apiserver_address:
+        type: str
+        required: true
+        description:
+          - IP address the API Server will advertise it's listening on.
+        version_added: 0.1.0

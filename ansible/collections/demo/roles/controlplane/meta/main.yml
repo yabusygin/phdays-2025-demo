@@ -1,0 +1,4 @@
+---
+galaxy_info:
+  author: Alexey Busygin
+  description: Initialize Kubernetes control plane node

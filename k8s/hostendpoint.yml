@@ -1,0 +1,71 @@
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: control-plane-mgmt
+spec:
+  node: control-plane
+  interfaceName: enp0s8
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: control-plane-k8s
+  labels:
+    node-name: control-plane
+spec:
+  node: control-plane
+  interfaceName: enp0s9
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-alice-1-mgmt
+spec:
+  node: worker-alice-1
+  interfaceName: enp0s8
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-alice-1-k8s
+  labels:
+    node-name: worker-alice-1
+spec:
+  node: worker-alice-1
+  interfaceName: enp0s9
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-alice-2-mgmt
+spec:
+  node: worker-alice-2
+  interfaceName: enp0s8
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-alice-2-k8s
+  labels:
+    node-name: worker-alice-2
+spec:
+  node: worker-alice-2
+  interfaceName: enp0s9
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-mallory-mgmt
+spec:
+  node: worker-mallory
+  interfaceName: enp0s8
+---
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: worker-mallory-k8s
+  labels:
+    node-name: worker-mallory
+spec:
+  node: worker-mallory
+  interfaceName: enp0s9

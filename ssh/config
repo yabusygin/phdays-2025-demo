@@ -1,0 +1,44 @@
+Host gateway
+    Hostname localhost
+    Port 22001
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host control-plane
+    Hostname localhost
+    Port 22010
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host worker-alice-1
+    Hostname localhost
+    Port 22011
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host worker-alice-2
+    Hostname localhost
+    Port 22012
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_ed25519
+    IdentitiesOnly yes
+
+Host worker-mallory
+    Hostname localhost
+    Port 22013
+    User root
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    IdentityFile ssh/id_ed25519
+    IdentitiesOnly yes
